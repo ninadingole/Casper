@@ -114,11 +114,20 @@ into the {body} of the default.hbs template --}}
                 {{> subscribe-form}}
             {{/if}}
 
-            {{!--
-            <section class="post-full-comments">
-                If you want to embed comments, this is a good place to do it!
-            </section>
-            --}}
+            <section class="post-full-comments" id="disqus_thread"></section>
+            <script>
+                var disqus_config = function () {
+                    this.page.url = "{{url absolute='true'}}";
+                    this.page.identifier = "ghost-{{comment_id}}";
+                };
+                (function() {
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://iamninad.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
         </article>
 
@@ -177,6 +186,8 @@ into the {body} of the default.hbs template --}}
 
 {{!-- The #contentFor helper here will send everything inside it up to the matching #block helper found in default.hbs --}}
 {{#contentFor "scripts"}}
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+
 <script>
     $(document).ready(function () {
         // FitVids - start
@@ -191,6 +202,10 @@ into the {body} of the default.hbs template --}}
             activeClass: 'nav-post-title-active'
         });
         // Replace nav with title on scroll - end
+
+        $('pre code').each(function(i, block) {
+            hljs.highlightBlock(block);
+        });
 
         // Hover on avatar
         var hoverTimeout;
